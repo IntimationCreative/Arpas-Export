@@ -2,6 +2,8 @@
 
 /**
  * Intimation Export Users
+ *
+ * @since 0.1
  */
 
 class Inti_Export_Users
@@ -38,6 +40,8 @@ class Inti_Export_Users
 
     /**
 	 * Sets up the main instance
+     *
+     * @since 0.1
      */
     public static function instance( $file = '', $version = '0.1')
     {
@@ -51,6 +55,8 @@ class Inti_Export_Users
 
     /**
      * Set the directory
+     *
+     * @since 0.1
      */
     public function set_directory_value(){
         $this->directory = plugins_url() . '/' . IEU_PLUGIN_BASE_FOLDER;
@@ -59,6 +65,8 @@ class Inti_Export_Users
 
     /**
      * Callback to load the admin view HTML
+     *
+     * @since 0.1
      */
     function ieu_options_page_view()
     {
@@ -70,6 +78,8 @@ class Inti_Export_Users
     
     /**
      * Add a menu item called export users
+     *
+     * @since 0.1
      * @params for add_menu_page: 
      * string $page_title, string $menu_title, string $capability, 
      * string $menu_slug, callable $function = '', string $icon_url = '', int $position = null
@@ -90,6 +100,8 @@ class Inti_Export_Users
     
     /**
      * register settings
+     *
+     * @since 0.1
      */
     function ieu_admin_settings_init()
     {
@@ -111,6 +123,8 @@ class Inti_Export_Users
     /**
      * Sanitize each setting field as needed
      *
+     * @since 0.1
+     *
      * @param array $input Contains all settings fields as array keys
      */
     public function sanitize( $input )
@@ -128,6 +142,8 @@ class Inti_Export_Users
 
     /**
      * Intimation Get Users
+     *
+     * @since 0.1
      */
     public function ieu_get_users() 
     {
@@ -148,6 +164,8 @@ class Inti_Export_Users
 
     /**
      * handle the export
+     *
+     * @since 0.1
      */
     public function ieu_export()
     {
@@ -201,6 +219,8 @@ class Inti_Export_Users
 
     /**
      * Import scripts and styles
+     *
+     * @since 0.1
      */
     public function ieu_scripts_and_styles()
     {
