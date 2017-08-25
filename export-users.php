@@ -24,7 +24,9 @@ define( 'IEU_PLUGIN_BASE_FOLDER', basename( dirname( __FILE__ ) ) );
 //define abs path to plugin folder (/var/www/vhosts/quorum.dev/httpdocs/wp-content/plugins/export-users)
 define( 'IEU_PLUGIN_ABS_FOLDER', dirname( __FILE__ ) );
 
-define( 'IEU_SITE_URL', '/var/www/vhosts/quorumbusiness.co.uk/httpdocs/' );
+// define( 'IEU_SITE_URL', '/var/www/vhosts/quorumbusiness.co.uk/httpdocs/' );
+define( 'IEU_SITE_URL', get_site_url() );
+
 
 /**
  * Loads the whole plugin.
