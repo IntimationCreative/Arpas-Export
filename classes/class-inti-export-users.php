@@ -18,11 +18,7 @@ class Inti_Export_Users
         // Activation
         //register_activation_hook( IEU_PLUGIN_BASENAME, array($this, 'psa_archive_posts_on_activation') );
 
-        // Initialise actions
-        add_action('admin_menu', array($this, 'ieu_options_page')); // options page
-        add_action('admin_init', array($this, 'ieu_admin_settings_init')); // settings
-
-         // load admin scripts and styles
+        // load admin scripts and styles
         add_action( 'admin_enqueue_scripts', array($this, 'ieu_scripts_and_styles') );
 
         // AJAX
@@ -37,6 +33,7 @@ class Inti_Export_Users
 
         
     }
+
 
     /**
 	 * Sets up the main instance
@@ -53,6 +50,7 @@ class Inti_Export_Users
         return self::$instance;
     }
 
+
     /**
      * Set the directory
      *
@@ -62,83 +60,6 @@ class Inti_Export_Users
         $this->directory = plugins_url() . '/' . IEU_PLUGIN_BASE_FOLDER;
     }
 
-
-    /**
-     * Callback to load the admin view HTML
-     *
-     * @since 0.1
-     */
-    function ieu_options_page_view()
-    {
-        if ( !current_user_can('manage_options') ) return;
-
-        include IEU_PLUGIN_ABS_FOLDER . '/admin/ieu_options_view.php';
-    }
-
-    
-    /**
-     * Add a menu item called export users
-     *
-     * @since 0.1
-     * @params for add_menu_page: 
-     * string $page_title, string $menu_title, string $capability, 
-     * string $menu_slug, callable $function = '', string $icon_url = '', int $position = null
-     */
-    
-    function ieu_options_page()
-    {
-        add_menu_page(
-            'Export Users',
-            'EXPORT USERS',
-            'manage_options',
-            'inti_export_users',
-            array($this, 'ieu_options_page_view'),
-            'dashicons-download',
-            33
-        );
-    }
-    
-    /**
-     * register settings
-     *
-     * @since 0.1
-     */
-    function ieu_admin_settings_init()
-    {
-        register_setting(
-            'export_users_settings', // Option group
-            'registered_qcard_users', // Option Name
-            array($this, 'sanitize') // Callback
-        );
-
-        add_settings_section(
-            'registered_qcard_users_section', // ID
-            ' ', // Title
-            array($this, 'ieu_get_users'), // Callback
-            'inti_export_users' // Page
-        );
-    }
-
-
-    /**
-     * Sanitize each setting field as needed
-     *
-     * @since 0.1
-     *
-     * @param array $input Contains all settings fields as array keys
-     */
-    public function sanitize( $input )
-    {
-    	$new_input = array();
-    	if( isset($input['show_manufacturers']) )
-    		$new_input['show_manufacturers'] = $input['show_manufacturers'];
-
-    	// if( isset( $input['title'] ) )
-    	// 	$new_input['title'] = sanitize_text_field( $input['title'] );
-
-    	return $new_input;
-    }
-    
 
     /**
      * Intimation Get Users
@@ -151,12 +72,15 @@ class Inti_Export_Users
 
         $users = $wpdb->get_results( 
             "
-            SELECT ID, user_email, display_name 
-            FROM $wpdb->users
+            SELECT users.ID, users.user_login, users.user_email, users.display_name, meta.meta_value AS role 
+            FROM $wpdb->users AS users 
+            LEFT JOIN $wpdb->usermeta AS meta ON users.ID = meta.user_id 
+            WHERE meta.meta_key = 'wp_capabilities' 
             "
         );
 
-        // echo count($users);
+        preg_match("/(\"[a-zA-Z]*\")/", $users[0]->role, $output);
+        $users[0]->role = str_replace('"', '', $output[0] );
 
         return $users;
     }
@@ -169,16 +93,15 @@ class Inti_Export_Users
      */
     public function ieu_export()
     {
-        
         // Security check.
         check_ajax_referer( 'ieu_export', 'nonce' );
 
         // create the headers and set the content type
         header('Content-Type: text/csv; charset=utf-8');
-        header('Content-Disposition: attachment; filename=qcard-users.csv');
+        header('Content-Disposition: attachment; filename=users.csv');
 
         // open a file for writing
-        $file = fopen( IEU_SITE_URL . 'qcard-users.csv', 'w');        
+        $file = fopen( IEU_SITE_URL . 'users.csv', 'w');        
 
         // varibles to pass into the fputcsv
         $handle = $file;
@@ -186,36 +109,21 @@ class Inti_Export_Users
         $delimiter = ',';
 
         // output the column headings
-        fputcsv( $file, array('ID', 'Email', 'Name', 'Company', 'Qcard ID', 'First Name', 'Last Name') );
-
+        // fputcsv( $file, array('ID', 'Email', 'Name', 'Company', 'Qcard ID', 'First Name', 'Last Name') );
+        fputcsv( $file, array('ID', 'Name', 'Email', 'Role') );
+        // echo '<pre>'; print_r($fields); echo '</pre>';
         foreach ($fields as $field) {
-            // company
-            $occupier = get_user_meta($field->ID, 'occupier', true);
-            $occupier = get_post( $occupier );
-            $company = $occupier->post_title;
-            // qcard
-            $qcardid = get_user_meta($field->ID, 'qcard_id', true);
-
-            //First and Last Name
-            $first = get_user_meta($field->ID, 'first_name', true);
-            $last = get_user_meta($field->ID, 'last_name', true);
-            
-            $field = array( $field->ID, $field->user_email, str_replace('-', ' ', $field->display_name), $company, $qcardid, $first, $last );
+            $field = array( $field->ID, $field->user_login, $field->user_email, $field->role );
             fputcsv( $handle, $field, $delimiter );
         }
 
         fclose($file);
-
-        $outputLink = site_url( '/qcard-users.csv' );
-
-        $data = $outputLink;
-
+        $outputLink = site_url( '/users.csv' );
+        $data['link'] = $outputLink;
+        $data['fields'] = $fields;
         wp_send_json_success( $data );   
-
         exit;     
-
     }
-
 
     /**
      * Import scripts and styles
@@ -224,10 +132,9 @@ class Inti_Export_Users
      */
     public function ieu_scripts_and_styles()
     {
-        
         wp_enqueue_script( 
             'ieu-scripts',
-            $this->directory . '/js/ieu-scripts.js', 
+            $this->directory . '/assets/js/ieu-scripts.js', 
             array('jquery')
         );
 
@@ -239,7 +146,7 @@ class Inti_Export_Users
 
         wp_enqueue_style( 
             'ieu-styles', 
-            $this->directory . '/css/ieu_export_users.css'
+            $this->directory . '/assets/css/ieu_export_users.css'
         );
     }
 }

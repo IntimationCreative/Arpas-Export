@@ -13,13 +13,13 @@ jQuery(document).ready(function($){
 
         var request = $.post( ieu_export.ajaxurl, data, function( response ) {
             console.log( response.data ); 
-            location = response.data;  
+            // location = response.data;  
         } );
 
         // Callback handler that will be called on success
         request.done(function (response, textStatus, jqXHR){
             // Log a message to the console
-            console.log("Hooray, it worked!");
+            console.log(response);
         });
 
         // Callback handler that will be called on failure

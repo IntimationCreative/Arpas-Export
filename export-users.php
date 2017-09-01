@@ -16,16 +16,13 @@
  * @since 0.1
  */
 include_once plugin_dir_path( __FILE__ ) . 'classes/class-inti-export-users.php';
+include_once plugin_dir_path( __FILE__ ) . 'admin/admin.php';
 
 // define the path to plugin file (export-users/export-users.php)
 define( 'IEU_PLUGIN_BASENAME', basename( dirname( __FILE__ ) ) . '/' . basename( __FILE__ ) );
 
-// define the plugin base folder
-define( 'IEU_PLUGIN_BASE_FOLDER', basename( dirname( __FILE__ ) ) );
-
-//define abs path to plugin folder
-define( 'IEU_PLUGIN_ABS_FOLDER', dirname( __FILE__ ) );
-
+define( 'IEU_PLUGIN_BASE_FOLDER', basename( dirname( __FILE__ ) ) ); // define the plugin base folder
+define( 'IEU_PLUGIN_ABS_FOLDER', dirname( __FILE__ ) ); //define abs path to plugin folder
 define( 'IEU_SITE_URL', get_site_url() );
 
 
