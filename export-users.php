@@ -13,7 +13,7 @@
  /**
  * Include the main plugin class.
  *
- * @since 0.1
+ * @since 1.0
  */
 include_once plugin_dir_path( __FILE__ ) . 'classes/class-inti-export-users.php';
 include_once plugin_dir_path( __FILE__ ) . 'admin/admin.php';
@@ -29,7 +29,7 @@ define( 'IEU_SITE_URL', get_site_url() );
 /**
  * Loads the whole plugin.
  *
- * @since 0.1
+ * @since 1.0
  * @return inti_export_users
  */
 function inti_export_users() 

@@ -3,7 +3,7 @@
 /**
  * Intimation Export Users
  *
- * @since 0.1
+ * @since 1.0
  */
 
 class Inti_Export_Users
@@ -38,7 +38,7 @@ class Inti_Export_Users
     /**
 	 * Sets up the main instance
      *
-     * @since 0.1
+     * @since 1.0
      */
     public static function instance( $file = '', $version = '0.1')
     {
@@ -54,7 +54,7 @@ class Inti_Export_Users
     /**
      * Set the directory
      *
-     * @since 0.1
+     * @since 1.0
      */
     public function set_directory_value(){
         $this->directory = plugins_url() . '/' . IEU_PLUGIN_BASE_FOLDER;
@@ -64,7 +64,7 @@ class Inti_Export_Users
     /**
      * Intimation Get Users
      *
-     * @since 0.1
+     * @since 1.0
      */
     public function ieu_get_users() 
     {
@@ -91,7 +91,7 @@ class Inti_Export_Users
     /**
      * handle the export
      *
-     * @since 0.1
+     * @since 1.0
      */
     public function ieu_export()
     {
@@ -132,7 +132,7 @@ class Inti_Export_Users
     /**
      * Import scripts and styles
      *
-     * @since 0.1
+     * @since 1.0
      */
     public function ieu_scripts_and_styles()
     {

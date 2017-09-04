@@ -108,7 +108,7 @@ class ExportUserList extends WP_List_Table
 
     /**
      * column posts callback
-     * @since 0.1
+     * @since 1.0
      * @return string
      */
     function column_posts( $item ) 

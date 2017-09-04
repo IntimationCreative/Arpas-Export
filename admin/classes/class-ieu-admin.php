@@ -15,7 +15,7 @@ class IntiExportUsersAdmin
     /**
      * Add a menu item called export users
      *
-     * @since 0.1
+     * @since 1.0
      * @params for add_menu_page: 
      * string $page_title, string $menu_title, string $capability, 
      * string $menu_slug, callable $function = '', string $icon_url = '', int $position = null
@@ -37,7 +37,7 @@ class IntiExportUsersAdmin
     /**
      * register settings
      *
-     * @since 0.1
+     * @since 1.0
      */
     function options_init()
     {
@@ -58,7 +58,7 @@ class IntiExportUsersAdmin
 
     /**
      * export user list
-     * @since 0.1
+     * @since 1.0
      */
     function export_user_list()
     {
