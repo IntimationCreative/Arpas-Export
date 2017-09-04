@@ -119,8 +119,9 @@ class Inti_Export_Users
         }
 
         fclose($file);
-        $outputLink = site_url( '/users.csv' );
-        $data['link'] = $outputLink;
+        
+        // $data['file'] = $file; // For testing only
+        // $data['url'] = $url; // For testing only 
         wp_send_json_success( $data );   
         exit;     
     }
