@@ -4,7 +4,7 @@
  * Plugin Name: Intimation Export Users
  * Plugin URI: http://intimation.uk
  * Description: Export Users in CSV
- * Version: 0.1
+ * Version: 1.0
  * Author: Paul Spence - Intimation
  * Author URI: http://intimation.uk
  * License: GPL
@@ -34,7 +34,7 @@ define( 'IEU_SITE_URL', get_site_url() );
  */
 function inti_export_users() 
 {
-	$instance = Inti_Export_Users::instance( __FILE__, '0.1' );
+	$instance = Inti_Export_Users::instance( __FILE__, '1.0' );
 
 	return $instance;
 }
