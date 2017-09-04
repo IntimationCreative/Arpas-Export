@@ -79,8 +79,10 @@ class Inti_Export_Users
             "
         );
 
-        preg_match("/(\"[a-zA-Z]*\")/", $users[0]->role, $output);
-        $users[0]->role = str_replace('"', '', $output[0] );
+        foreach ($users as $user) {
+            preg_match("/(\"[a-zA-Z]*\")/", $user->role, $output);
+            $user->role = str_replace('"', '', $output[0] );
+        }
 
         return $users;
     }
@@ -122,6 +124,7 @@ class Inti_Export_Users
         
         // $data['file'] = $file; // For testing only
         // $data['url'] = $url; // For testing only 
+        $data['fields'] = $fields;
         wp_send_json_success( $data );   
         exit;     
     }
