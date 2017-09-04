@@ -100,8 +100,10 @@ class Inti_Export_Users
         header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename=users.csv');
 
+        $url = ABSPATH . 'users.csv';
+
         // open a file for writing
-        $file = fopen( IEU_SITE_URL . 'users.csv', 'w');        
+        $file = fopen( $url, 'w');        
 
         // varibles to pass into the fputcsv
         $handle = $file;
@@ -109,9 +111,8 @@ class Inti_Export_Users
         $delimiter = ',';
 
         // output the column headings
-        // fputcsv( $file, array('ID', 'Email', 'Name', 'Company', 'Qcard ID', 'First Name', 'Last Name') );
-        fputcsv( $file, array('ID', 'Name', 'Email', 'Role') );
-        // echo '<pre>'; print_r($fields); echo '</pre>';
+        fputcsv( $file, array('ID', 'Name', 'Email', 'Role') ); // could do with making this dynamic
+
         foreach ($fields as $field) {
             $field = array( $field->ID, $field->user_login, $field->user_email, $field->role );
             fputcsv( $handle, $field, $delimiter );
@@ -120,7 +121,6 @@ class Inti_Export_Users
         fclose($file);
         $outputLink = site_url( '/users.csv' );
         $data['link'] = $outputLink;
-        $data['fields'] = $fields;
         wp_send_json_success( $data );   
         exit;     
     }
