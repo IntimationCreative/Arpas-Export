@@ -19,6 +19,8 @@ class ExportUserList extends WP_List_Table
             'plural' => 'wp_list_available_updates',
             'ajax' => false
         ));
+
+        add_action('admin_head', array( &$this, 'admin_header') );
     }
 
 
@@ -56,7 +58,7 @@ class ExportUserList extends WP_List_Table
      * reduces the WP_User object into an array
      *
      * @param object $user_object_array
-     * @return void
+     * @return array $users
      */
     function filter_get_user( $user_object_array )
     {
@@ -103,7 +105,7 @@ class ExportUserList extends WP_List_Table
     function get_columns()
     {
         return $columns = array(
-            'fullname' => __( 'fullname' ),
+            'fullname' => __( 'Full Name' ),
             'email' => __( 'Email' ),
             'company' => __( 'company' ),
             'pfco' => __( 'pfco' ),
@@ -174,5 +176,11 @@ class ExportUserList extends WP_List_Table
         // preg_match("/(\"[a-zA-Z]*\")/", $item->membership, $output);
         // return str_replace('"', '', $output[0] );
         return get_user_meta($item['ID'], 'membership_number', true);;
+    }
+
+
+    function admin_header() 
+    {
+        echo "Admin Header";
     }
 }
