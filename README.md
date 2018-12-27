@@ -1,2 +1,2 @@
-# inti-export-users
-a small plugin to export users from Wordpress
+# Arpas-Export-Users
+A Wordpress plugin to export users - arpas.uk specific functionality
