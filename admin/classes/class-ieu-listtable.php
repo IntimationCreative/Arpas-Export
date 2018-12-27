@@ -55,7 +55,7 @@ class ExportUserList extends WP_List_Table
     function get_sortable_columns()
     {
         return $sortable = array(
-            'col_name' => 'fullname'
+            'fullname' => 'fullname'
         );
     }
 
