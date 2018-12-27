@@ -25,7 +25,7 @@ class ExportUserList extends WP_List_Table
     /**
      * get the users from the main class, to edit the args
      * use the main export
-     * @return void
+     * @return array user objects
      */
     function get_users()
     {
@@ -40,11 +40,33 @@ class ExportUserList extends WP_List_Table
      */
     function prepare_items()
     {
-        $this->items = $this->get_users();
+        // sort the users by email
+        $users = $this->filter_get_user( $this->get_users() );
+        usort($users, array($this, 'reorder_columns'));
+        $this->items = $users;
+
         $columns = $this->get_columns(); // Register Columns
         $hidden = array();
         $sortable = $this->get_sortable_columns();
+
         $this->_column_headers = array($columns, $hidden, $sortable);
+    }
+
+    /**
+     * reduces the WP_User object into an array
+     *
+     * @param object $user_object_array
+     * @return void
+     */
+    function filter_get_user( $user_object_array )
+    {
+        $users = array_map(function($item) {
+            $user['ID'] = $item->data->ID;
+            $user['user_email'] = $item->data->user_email;
+            return $user;
+        }, $user_object_array);
+
+        return $users;
     }
 
 
@@ -55,8 +77,21 @@ class ExportUserList extends WP_List_Table
     function get_sortable_columns()
     {
         return $sortable = array(
-            'fullname' => 'fullname'
+            'email' => 'Email'
         );
+    }
+
+
+    /**
+     * sort columns
+     * @since 1.1
+     */
+    function reorder_columns( $a, $b )
+    {
+        $orderby = ( ! empty( $_GET['orderby'] ) ) ? $_GET['orderby'] : '';
+        $order = (!empty($_GET['order'])) ? $_GET['order'] : 'asc';
+        $result = strcmp( $a['user_email'], $b['user_email'] );
+        return ( $order === 'asc' ) ? $result : -$result;
     }
 
 
@@ -85,7 +120,7 @@ class ExportUserList extends WP_List_Table
      */
     function column_email( $item ) 
     {
-        return $item->user_email;
+        return $item['user_email'];
     }
 
 
@@ -97,8 +132,8 @@ class ExportUserList extends WP_List_Table
      */
     protected function column_fullname( $item ) 
     {
-        $first = get_user_meta($item->ID, 'first_name', true);
-        $last = get_user_meta($item->ID, 'last_name', true);
+        $first = get_user_meta($item['ID'], 'first_name', true);
+        $last = get_user_meta($item['ID'], 'last_name', true);
         return $first . ' ' . $last;
     }
 
@@ -111,7 +146,7 @@ class ExportUserList extends WP_List_Table
      */
     function column_company( $item ) 
     {
-        return get_user_meta($item->ID, 'operator_name', true);
+        return get_user_meta($item['ID'], 'operator_name', true);
     }
 
 
@@ -123,7 +158,7 @@ class ExportUserList extends WP_List_Table
      */
     function column_pfco( $item ) 
     {
-        return get_user_meta($item->ID, 'operator_pfco_number', true);
+        return get_user_meta($item['ID'], 'operator_pfco_number', true);
     }
 
 
@@ -138,6 +173,6 @@ class ExportUserList extends WP_List_Table
         // echo '<pre>'; print_r($item); echo '</pre>';
         // preg_match("/(\"[a-zA-Z]*\")/", $item->membership, $output);
         // return str_replace('"', '', $output[0] );
-        return get_user_meta($item->ID, 'membership_number', true);;
+        return get_user_meta($item['ID'], 'membership_number', true);;
     }
 }
