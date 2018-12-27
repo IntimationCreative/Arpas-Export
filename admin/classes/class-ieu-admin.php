@@ -43,12 +43,12 @@ class IntiExportUsersAdmin
     {
         register_setting(
             'export_users_settings', // Option group
-            'registered_qcard_users', // Option Name
+            'active_arpas_users', // Option Name
             array() // Callback
         );
 
         add_settings_section(
-            'registered_qcard_users_section', // ID
+            'active_arpas_users_section', // ID
             ' ', // Title
             array($this, 'get_users'), // Callback
             'inti_export_users' // Page

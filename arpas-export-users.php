@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name: Intimation Export Users
+ * Plugin Name: Intimation Arpas Export Users
  * Plugin URI: http://intimation.uk
  * Description: Export Users in CSV
  * Version: 1.0
@@ -15,7 +15,7 @@
  *
  * @since 1.0
  */
-include_once plugin_dir_path( __FILE__ ) . 'classes/class-inti-export-users.php';
+include_once plugin_dir_path( __FILE__ ) . 'classes/class-arpas-export-users.php';
 include_once plugin_dir_path( __FILE__ ) . 'admin/admin.php';
 
 // define the path to plugin file (export-users/export-users.php)
@@ -30,13 +30,13 @@ define( 'IEU_SITE_URL', get_site_url() );
  * Loads the whole plugin.
  *
  * @since 1.0
- * @return inti_export_users
+ * @return arpas_export_users
  */
-function inti_export_users() 
+function arpas_export_users() 
 {
-	$instance = Inti_Export_Users::instance( __FILE__, '1.0' );
+	$instance = Arpas_Export_Users::instance( __FILE__, '1.0' );
 
 	return $instance;
 }
 
-inti_export_users();
+arpas_export_users();

@@ -8,3 +8,19 @@
 	height: auto !important;
 	font-size: 18px !important;
 }
+
+.button.ieu-send {
+	background: rgb(38, 187, 24) !important;
+	border-color: rgb(38, 187, 24) !important;
+	color: #fff !important;
+	padding: 0.5em 2rem !important;
+	display: block !important;
+	vertical-align: middle;
+	height: auto !important;
+	font-size: 18px !important;
+	margin: 2rem auto;
+}
+
+.results {
+	margin: 2rem auto;
+}

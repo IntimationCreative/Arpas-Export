@@ -11,6 +11,7 @@ class ExportUserList extends WP_List_Table
 {
     public $items;
 
+
     function __construct()
     {
         parent::__construct( array(
@@ -20,30 +21,32 @@ class ExportUserList extends WP_List_Table
         ));
     }
 
+
+    /**
+     * get the users from the main class, to edit the args
+     * use the main export
+     * @return void
+     */
+    function get_users()
+    {
+        $user_export = new Arpas_Export_Users();
+        return $user_export->ieu_get_users();
+    }
+
+
     /**
      * Prepare the table and assign items to the table
      * @since 1.0
      */
     function prepare_items()
     {
-        global $wpdb;
-        
-        $users = $wpdb->get_results( 
-            "
-            SELECT users.ID, users.user_login, users.user_email, users.display_name, meta.meta_value AS role 
-            FROM $wpdb->users AS users 
-            LEFT JOIN $wpdb->usermeta AS meta ON users.ID = meta.user_id 
-            WHERE meta.meta_key = 'wp_capabilities' 
-            "
-        );
-        $this->items = $users;
-
-        // Register Columns
-        $columns = $this->get_columns();
+        $this->items = $this->get_users();
+        $columns = $this->get_columns(); // Register Columns
         $hidden = array();
         $sortable = $this->get_sortable_columns();
         $this->_column_headers = array($columns, $hidden, $sortable);
     }
+
 
     /**
      * define sortable columns
@@ -52,9 +55,10 @@ class ExportUserList extends WP_List_Table
     function get_sortable_columns()
     {
         return $sortable = array(
-            'col_name' => 'username'
+            'col_name' => 'fullname'
         );
     }
+
 
     /**
      * define the columns that are in the table
@@ -64,64 +68,76 @@ class ExportUserList extends WP_List_Table
     function get_columns()
     {
         return $columns = array(
-            'username' => __( 'Username' ),
+            'fullname' => __( 'fullname' ),
             'email' => __( 'Email' ),
-            'role' => __( 'Role' ),
-			'posts' => __( 'Posts' )
+            'company' => __( 'company' ),
+            'pfco' => __( 'pfco' ),
+            'membership' => __( 'membership' ),
         );
     }
 
-	/**
-	 * column name callback
-     * @since 1.0
-	 * @param obj $item
-	 * @return string
-	 */
-    protected function column_username( $item ) 
-    {
-        // echo '<pre>'; print_r($item); echo '</pre>';
-		return $item->display_name;
-	}
 
-	/**
-	 * column email callback
+    /**
+     * column email callback
      * @since 1.0
-	 * @param obj $item
-	 * @return string
-	 */
+     * @param obj $item
+     * @return string
+     */
     function column_email( $item ) 
     {
         return $item->user_email;
-	}
-
-	/**
-	 * column role callback
-     * @since 1.0
-	 * @param obj $item
-	 * @return string
-	 */
-    function column_role( $item ) 
-    {
-        preg_match("/(\"[a-zA-Z]*\")/", $item->role, $output);
-		return str_replace('"', '', $output[0] );
     }
 
+
     /**
-     * column posts callback
+     * column fullname callback
      * @since 1.0
+     * @param obj $item
      * @return string
      */
-    function column_posts( $item ) 
+    protected function column_fullname( $item ) 
     {
-        global $wpdb;        
-        $users = $wpdb->get_results( 
-            "
-            SELECT COUNT(posts.ID) AS posts 
-            FROM $wpdb->posts AS posts
-            WHERE posts.post_author = $item->ID 
-            "
-        );
-        // echo '<pre>'; print_r($users); echo '</pre>';
-        return $users[0]->posts;
+        $first = get_user_meta($item->ID, 'first_name', true);
+        $last = get_user_meta($item->ID, 'last_name', true);
+        return $first . ' ' . $last;
+    }
+
+
+    /**
+     * column company callback
+     * @since 1.0
+     * @param obj $item
+     * @return string
+     */
+    function column_company( $item ) 
+    {
+        return get_user_meta($item->ID, 'operator_name', true);
+    }
+
+
+    /**
+     * column pfco callback
+     * @since 1.0
+     * @param obj $item
+     * @return string
+     */
+    function column_pfco( $item ) 
+    {
+        return get_user_meta($item->ID, 'operator_pfco_number', true);
+    }
+
+
+    /**
+     * column company callback
+     * @since 1.0
+     * @param obj $item
+     * @return string
+     */
+    function column_membership( $item ) 
+    {
+        // echo '<pre>'; print_r($item); echo '</pre>';
+        // preg_match("/(\"[a-zA-Z]*\")/", $item->membership, $output);
+        // return str_replace('"', '', $output[0] );
+        return get_user_meta($item->ID, 'membership_number', true);;
     }
 }
