@@ -4,7 +4,7 @@
  * Plugin Name: Intimation Arpas Export Users
  * Plugin URI: http://intimation.uk
  * Description: Export Users in CSV
- * Version: 1.0
+ * Version: 1.1
  * Author: Paul Spence - Intimation
  * Author URI: http://intimation.uk
  * License: GPL
