@@ -20,7 +20,6 @@ class ExportUserList extends WP_List_Table
             'ajax' => false
         ));
 
-        add_action('admin_head', array( &$this, 'admin_header') );
     }
 
 
@@ -178,9 +177,4 @@ class ExportUserList extends WP_List_Table
         return get_user_meta($item['ID'], 'membership_number', true);;
     }
 
-
-    function admin_header() 
-    {
-        echo "Admin Header";
-    }
 }

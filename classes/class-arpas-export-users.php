@@ -87,7 +87,7 @@ class Arpas_Export_Users
 
         // varibles to pass into the fputcsv
         $handle = $file;
-        $fields = $this->ieu_get_users();
+        $fields = $this->ieu_get_users($_POST['type']);
         $delimiter = ',';
 
         // output the column headings
@@ -123,15 +123,21 @@ class Arpas_Export_Users
             'link' => $outputLink,
             'url' => IEU_SITE_URL,
             'server_remote' => $_SERVER['REMOTE_ADDR'],
-            'server_adr' => $_SERVER['SERVER_ADDR']
+            'server_adr' => $_SERVER['SERVER_ADDR'],
         );
 
         wp_send_json_success( $data );
     }
 
-    public function ieu_get_users()
-    {
-        return get_users();
+    public function ieu_get_users($type = 'all')
+    {   
+        if ($type === 'all') {
+            return get_users();
+        }
+        $args = array(
+            'role' => 'inactive_user',
+        );
+        return get_users($args);
     }
 
 
