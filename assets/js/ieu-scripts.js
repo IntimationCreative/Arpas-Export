@@ -1,9 +1,8 @@
 (function() {
 	window.addEventListener('DOMContentLoaded', function() {
 		// define common variables
-		const button = document.getElementById('export');
+		const buttons = document.querySelectorAll('.export');
 		const xhttp = new XMLHttpRequest();
-		const params = getParams(button);
 
 		function getParams(element) {
 			return 'action=ieu_export&security=' + ieu_export.nonce + '&type=' + element.getAttribute('data-type');
@@ -29,13 +28,16 @@
 
 		function handleResponse(response) {
 			// get the download link
-			//location = response.data.link;
+			location = response.data.link;
 		}
 
 		// Event bindings
-		button.addEventListener('click', function(e) {
-			e.preventDefault;
-			makeRequest(xhttp, params);
+		Array.from(buttons).forEach((button) => {
+			button.addEventListener('click', (e) => {
+				e.preventDefault;
+				let params = getParams(button);
+				makeRequest(xhttp, params);
+			});
 		});
 
 		function sendAjaxRequest(data, action, callback = function() {}) {

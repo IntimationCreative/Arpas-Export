@@ -132,11 +132,12 @@ class Arpas_Export_Users
     public function ieu_get_users($type = 'all')
     {   
         if ($type === 'all') {
-            return get_users();
+            $args = array();
+        } else {
+            $args = array(
+                'role__not_in' => 'inactive_user',
+            );
         }
-        $args = array(
-            'role' => 'inactive_user',
-        );
         return get_users($args);
     }
 

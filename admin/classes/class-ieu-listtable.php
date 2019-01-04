@@ -106,9 +106,10 @@ class ExportUserList extends WP_List_Table
         return $columns = array(
             'fullname' => __( 'Full Name' ),
             'email' => __( 'Email' ),
-            'company' => __( 'company' ),
-            'pfco' => __( 'pfco' ),
-            'membership' => __( 'membership' ),
+            'company' => __( 'Company' ),
+            'pfco' => __( 'PFco' ),
+            'membership' => __( 'Membership' ),
+            'address' => __( 'Address' ),
         );
     }
 
@@ -175,6 +176,22 @@ class ExportUserList extends WP_List_Table
         // preg_match("/(\"[a-zA-Z]*\")/", $item->membership, $output);
         // return str_replace('"', '', $output[0] );
         return get_user_meta($item['ID'], 'membership_number', true);;
+    }
+
+
+    /**
+     * column address callback
+     * @since 1.0
+     * @param obj $item
+     * @return string
+     */
+    function column_address($item)
+    {
+        $address1 = get_user_meta($item['ID'], 'operator_address_line_1', true);
+        $address2 = get_user_meta($item['ID'], 'operator_address_line_2', true);
+        $town = get_user_meta($item['ID'], 'operator_town_city', true);
+        $postcode = get_user_meta($item['ID'], 'operator_postcode', true);
+        return $address1 . ', ' . $address2 . ', ' . $town . ', ' . $postcode;
     }
 
 }
